@@ -1,0 +1,17 @@
+# Python environments and artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+*.pyc
+
+# SecondSelf Raw Data & Assets (Optional: uncomment if you don't want to commit captured raw data/assets to public git)
+# raw/*.json
+# raw/assets/*
+# !raw/assets/.gitkeep
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
