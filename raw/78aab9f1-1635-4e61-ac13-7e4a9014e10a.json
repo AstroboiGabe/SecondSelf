@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "78aab9f1-1635-4e61-ac13-7e4a9014e10a",
+  "timestamp": "2026-07-20T11:30:47.019960+00:00",
+  "type": "note",
+  "content": "The Archives section in PARA is for items you no longer actively need but want to keep just in case.",
+  "metadata": {
+    "original_path": null,
+    "asset_path": null,
+    "url_title": null,
+    "file_size_bytes": null,
+    "file_extension": null,
+    "tags": [
+      "pkb",
+      "para"
+    ]
+  },
+  "status": "processed"
+}

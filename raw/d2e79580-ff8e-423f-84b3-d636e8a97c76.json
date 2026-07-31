@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "d2e79580-ff8e-423f-84b3-d636e8a97c76",
+  "timestamp": "2026-07-20T10:41:36.233788+00:00",
+  "type": "file",
+  "content": "architecture.md",
+  "metadata": {
+    "original_path": "C:\\Users\\dep6g\\Documents\\Cohort Projects\\July Cohort\\Week1\\architecture.md",
+    "asset_path": "raw/assets/d2e79580-ff8e-423f-84b3-d636e8a97c76_architecture.md",
+    "url_title": null,
+    "file_size_bytes": 12275,
+    "file_extension": ".md",
+    "tags": [
+      "secondself",
+      "architecture"
+    ]
+  },
+  "status": "processed"
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "7362f1b1-c7e4-44b0-99ec-99660197ba8f",
+  "timestamp": "2026-07-20T10:41:35.216916+00:00",
+  "type": "link",
+  "content": "https://fortelabs.com/",
+  "metadata": {
+    "original_path": null,
+    "asset_path": null,
+    "url_title": "Home - Forte Labs",
+    "file_size_bytes": null,
+    "file_extension": null,
+    "tags": [
+      "pkb",
+      "tiago_forte"
+    ],
+    "url_status": "online"
+  },
+  "status": "processed"
+}

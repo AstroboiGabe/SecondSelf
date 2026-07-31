@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "330ce743-4a6c-4d45-aecd-60e620597a26",
+  "timestamp": "2026-07-20T10:41:34.338543+00:00",
+  "type": "link",
+  "content": "https://github.com/langchain-ai/langchain",
+  "metadata": {
+    "original_path": null,
+    "asset_path": null,
+    "url_title": "GitHub - langchain-ai/langchain: The agent engineering platform. · GitHub",
+    "file_size_bytes": null,
+    "file_extension": null,
+    "tags": [
+      "python",
+      "ai",
+      "repo"
+    ],
+    "url_status": "online"
+  },
+  "status": "processed"
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "2dc6bcdc-9565-4dbb-8f82-15123f126aa1",
+  "timestamp": "2026-07-20T10:41:32.737450+00:00",
+  "type": "link",
+  "content": "https://lilianweng.github.io/posts/2023-06-23-agent/",
+  "metadata": {
+    "original_path": null,
+    "asset_path": null,
+    "url_title": "LLM Powered Autonomous Agents | Lil'Log",
+    "file_size_bytes": null,
+    "file_extension": null,
+    "tags": [
+      "ai",
+      "agents",
+      "reading"
+    ],
+    "url_status": "online"
+  },
+  "status": "processed"
+}

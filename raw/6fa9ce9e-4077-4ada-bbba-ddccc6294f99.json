@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99",
+  "timestamp": "2026-07-20T10:41:35.706116+00:00",
+  "type": "file",
+  "content": "problemstatement.md",
+  "metadata": {
+    "original_path": "C:\\Users\\dep6g\\Documents\\Cohort Projects\\July Cohort\\Week1\\problemstatement.md",
+    "asset_path": "raw/assets/6fa9ce9e-4077-4ada-bbba-ddccc6294f99_problemstatement.md",
+    "url_title": null,
+    "file_size_bytes": 4837,
+    "file_extension": ".md",
+    "tags": [
+      "secondself",
+      "spec"
+    ]
+  },
+  "status": "processed"
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "bc496b4a-8429-45fb-b0b6-9014d482bd84",
+  "timestamp": "2026-07-20T10:41:36.664199+00:00",
+  "type": "file",
+  "content": "requirements.txt",
+  "metadata": {
+    "original_path": "C:\\Users\\dep6g\\Documents\\Cohort Projects\\July Cohort\\Week1\\requirements.txt",
+    "asset_path": "raw/assets/bc496b4a-8429-45fb-b0b6-9014d482bd84_requirements.txt",
+    "url_title": null,
+    "file_size_bytes": 61,
+    "file_extension": ".txt",
+    "tags": [
+      "secondself",
+      "python"
+    ]
+  },
+  "status": "processed"
+}

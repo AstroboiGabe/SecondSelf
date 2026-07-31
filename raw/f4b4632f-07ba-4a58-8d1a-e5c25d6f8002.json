@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002",
+  "timestamp": "2026-07-20T11:30:46.078943+00:00",
+  "type": "link",
+  "content": "https://sbert.net/",
+  "metadata": {
+    "original_path": null,
+    "asset_path": null,
+    "url_title": "SentenceTransformers Documentation — Sentence Transformers  documentation",
+    "file_size_bytes": null,
+    "file_extension": null,
+    "tags": [
+      "ai",
+      "python"
+    ],
+    "url_status": "online"
+  },
+  "status": "processed"
+}

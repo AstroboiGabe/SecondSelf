@@ -12,6 +12,10 @@ import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, Dict, Any, List
+import urllib.parse
+import requests
+import argparse
+from bs4 import BeautifulSoup
 
 try:
     from dotenv import load_dotenv
@@ -122,6 +126,107 @@ def save_record_to_raw(record: CaptureRecord, raw_dir: Optional[str] = None) -> 
         raise IOError(f"Failed to atomically save CaptureRecord {record.id}: {str(e)}") from e
 
 
+class NoteHandler:
+    @staticmethod
+    def process(note_text: str, tags: Optional[List[str]] = None) -> CaptureRecord:
+        if not note_text or not note_text.strip():
+            raise ValueError("Note content is empty.")
+        
+        metadata = {"tags": tags if tags else []}
+        return CaptureRecord(capture_type="note", content=note_text, metadata=metadata)
+
+
+class LinkHandler:
+    @staticmethod
+    def process(url: str, tags: Optional[List[str]] = None) -> CaptureRecord:
+        url = url.strip()
+        parsed = urllib.parse.urlparse(url)
+        # EC-LINK-03: Missing URL Scheme / Protocol
+        if not parsed.scheme:
+            url = f"https://{url}"
+        
+        metadata = {
+            "tags": tags if tags else [],
+            "url_status": "online"
+        }
+        
+        try:
+            # EC-LINK-02: User-Agent spoofing & 4.0s timeout
+            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+            response = requests.get(url, headers=headers, timeout=4.0)
+            
+            if response.status_code != 200:
+                metadata["http_status"] = response.status_code
+                metadata["url_status"] = "error"
+            else:
+                # EC-LINK-04: Non-HTML Link Targets Pre-Check
+                content_type = response.headers.get("Content-Type", "")
+                if "text/html" in content_type:
+                    soup = BeautifulSoup(response.content, "html.parser")
+                    title_tag = soup.find("title")
+                    if title_tag and title_tag.string:
+                        metadata["url_title"] = title_tag.string.strip()
+                    else:
+                        metadata["url_title"] = None
+                else:
+                    metadata["content_type"] = content_type
+                    
+        except (requests.RequestException, requests.Timeout) as e:
+            # EC-LINK-01: Offline Resilience
+            metadata["url_status"] = "offline"
+            metadata["error_msg"] = str(e)
+            
+        return CaptureRecord(capture_type="link", content=url, metadata=metadata)
+
+
+class FileHandler:
+    @staticmethod
+    def process(file_path: str, tags: Optional[List[str]] = None, raw_dir: Optional[str] = None) -> CaptureRecord:
+        path = Path(file_path).resolve()
+        
+        # EC-FILE-01: Non-Existent Path
+        if not path.exists():
+            raise FileNotFoundError(f"Target file does not exist: {path}")
+        if not path.is_file():
+            raise IsADirectoryError(f"Target is a directory, not a file: {path}")
+            
+        file_size = path.stat().st_size
+        metadata = {
+            "tags": tags if tags else [],
+            "original_path": str(path),
+            "file_size_bytes": file_size,
+            "file_extension": path.suffix.lower()
+        }
+        
+        if file_size == 0:
+            metadata["empty_file"] = True
+            
+        record_id = str(uuid.uuid4())
+        
+        if raw_dir is None:
+            script_dir = Path(__file__).resolve().parent
+            assets_dir = script_dir / "raw" / "assets"
+        else:
+            assets_dir = Path(raw_dir) / "assets"
+            
+        assets_dir.mkdir(parents=True, exist_ok=True)
+        
+        # EC-FILE-02: Filename collisions & sanitization
+        safe_basename = "".join([c if c.isalnum() or c in " .-_" else "_" for c in path.name])
+        asset_filename = f"{record_id}_{safe_basename}"
+        target_asset_path = assets_dir / asset_filename
+        
+        # EC-FILE-04: Copy file safely
+        try:
+            shutil.copy2(path, target_asset_path)
+            # EC-STORE-03: POSIX path representation
+            metadata["asset_path"] = f"raw/assets/{asset_filename}"
+        except Exception as e:
+            raise IOError(f"Failed to copy asset to {target_asset_path}: {e}")
+            
+        return CaptureRecord(capture_type="file", content=path.name, record_id=record_id, metadata=metadata)
+
+
 def verify_phase2_model():
     """Diagnostic self-test to verify Phase 2 CaptureRecord creation and atomic saving."""
     print("=== [Phase 2 Diagnostic Verification] ===")
@@ -155,10 +260,98 @@ def verify_phase2_model():
     if os.path.exists(saved_path):
         os.remove(saved_path)
         print(f"   Removed diagnostic file: {saved_path}")
-    print("=== [Phase 2 Complete & Fully Verified] ===")
+    print("=== [Phase 2 Complete & Fully Verified] ===\n")
+
+
+def verify_phase3_handlers():
+    """Diagnostic self-test to verify Phase 3 Modality Handlers."""
+    print("=== [Phase 3 Diagnostic Verification] ===")
+    
+    # 1. Test NoteHandler
+    print("1. Testing NoteHandler...")
+    note_record = NoteHandler.process("This is a phase 3 test note.", tags=["test", "p3"])
+    note_path = save_record_to_raw(note_record)
+    print(f"   [SUCCESS] Note captured: {note_path}")
+    
+    # 2. Test LinkHandler
+    print("2. Testing LinkHandler (github.com)...")
+    link_record = LinkHandler.process("github.com", tags=["code"])
+    link_path = save_record_to_raw(link_record)
+    print(f"   [SUCCESS] Link captured. URL Title: {link_record.metadata.get('url_title')}")
+    
+    # 3. Test FileHandler
+    print("3. Testing FileHandler (using requirements.txt as dummy file)...")
+    req_file = str(Path(__file__).resolve().parent / "requirements.txt")
+    file_record = FileHandler.process(req_file, tags=["deps"])
+    file_path = save_record_to_raw(file_record)
+    print(f"   [SUCCESS] File captured. Asset Path: {file_record.metadata.get('asset_path')}")
+    
+    # Cleanup Phase 3 diagnostics
+    print("4. Cleaning up Phase 3 diagnostics...")
+    for p in [note_path, link_path, file_path]:
+        if os.path.exists(p):
+            os.remove(p)
+    
+    # Also cleanup the copied asset
+    asset_abs = Path(__file__).resolve().parent / file_record.metadata.get('asset_path')
+    if asset_abs.exists():
+        asset_abs.unlink()
+        
+    print("=== [Phase 3 Complete & Fully Verified] ===")
+
+
+def main():
+    # Diagnostic test overrides
+    if len(sys.argv) > 1 and sys.argv[1] == "--test-phase2":
+        verify_phase2_model()
+        return
+    if len(sys.argv) > 1 and sys.argv[1] == "--test-phase3":
+        verify_phase3_handlers()
+        return
+
+    parser = argparse.ArgumentParser(description="SecondSelf Archival Capture Engine (The Archivist)")
+    
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("-n", "--note", type=str, help="Capture a text note or idea.")
+    group.add_argument("-l", "--link", type=str, help="Capture a web URL.")
+    group.add_argument("-f", "--file", type=str, help="Capture a local file (will be copied to raw/assets/).")
+    
+    parser.add_argument("-t", "--tags", type=str, help="Optional comma-separated tags (e.g. 'code,idea').")
+    
+    args = parser.parse_args()
+    
+    tags_list = [t.strip() for t in args.tags.split(",")] if args.tags else []
+    
+    try:
+        if args.note is not None:
+            record = NoteHandler.process(args.note, tags=tags_list)
+            capture_type = "NOTE"
+        elif args.link is not None:
+            record = LinkHandler.process(args.link, tags=tags_list)
+            capture_type = "LINK"
+        elif args.file is not None:
+            record = FileHandler.process(args.file, tags=tags_list)
+            capture_type = "FILE"
+            
+        saved_path = save_record_to_raw(record)
+        
+        # Clean terminal reporting format as per implementationplan.md
+        rel_path = Path(saved_path).relative_to(Path(__file__).resolve().parent).as_posix()
+        print(f"[SUCCESS] Captured [{capture_type}] -> {rel_path}")
+        print(f"ID:        {record.id}")
+        print(f"Timestamp: {record.timestamp}")
+        
+        # Smart content preview
+        content_preview = record.content.replace('\n', ' ')
+        if len(content_preview) > 100:
+            content_preview = content_preview[:97] + "..."
+        print(f"Content:   {content_preview}")
+        
+    except Exception as e:
+        print(f"[ERROR] Capture failed: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
-    # If run directly during Phase 2 without arguments or with --test-phase2, run unit test verification
-    if len(sys.argv) == 1 or "--test-phase2" in sys.argv:
-        verify_phase2_model()
+    main()
+

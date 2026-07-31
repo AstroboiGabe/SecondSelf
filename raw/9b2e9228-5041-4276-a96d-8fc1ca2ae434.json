@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "9b2e9228-5041-4276-a96d-8fc1ca2ae434",
+  "timestamp": "2026-07-20T10:41:30.172101+00:00",
+  "type": "note",
+  "content": "PARA stands for Projects, Areas, Resources, and Archives. It is a system for organizing digital information developed by Tiago Forte.",
+  "metadata": {
+    "original_path": null,
+    "asset_path": null,
+    "url_title": null,
+    "file_size_bytes": null,
+    "file_extension": null,
+    "tags": [
+      "pkb",
+      "method"
+    ]
+  },
+  "status": "processed"
+}
