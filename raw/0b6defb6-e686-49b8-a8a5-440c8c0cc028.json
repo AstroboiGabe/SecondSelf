@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "id": "0b6defb6-e686-49b8-a8a5-440c8c0cc028",
+  "timestamp": "2026-08-06T11:15:12.443226+00:00",
+  "type": "note",
+  "content": "Gabriel watched The Odyssey directed by Christopher Nolan on 21st October 2026",
+  "metadata": {
+    "original_path": null,
+    "asset_path": null,
+    "url_title": null,
+    "file_size_bytes": null,
+    "file_extension": null,
+    "tags": []
+  },
+  "status": "processed"
+}

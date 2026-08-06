@@ -2,10 +2,18 @@ import streamlit as st
 import os
 import pickle
 import numpy as np
+import shutil
+import psutil
 from pathlib import Path
 from groq import Groq
 from sentence_transformers import SentenceTransformer, util
 from dotenv import load_dotenv
+
+# Import local backend scripts
+import capture
+import classify
+import link
+import build_graph
 
 # Load env for local testing
 load_dotenv()
@@ -15,6 +23,7 @@ st.set_page_config(page_title="SecondSelf Oracle", page_icon="🧠", layout="wid
 # Initialize directories
 script_dir = Path(__file__).resolve().parent
 wiki_dir = script_dir / "wiki"
+raw_dir = script_dir / "raw"
 cache_path = script_dir / "embeddings.pkl"
 
 # --- Backend Setup (Cached) ---
@@ -25,7 +34,7 @@ def load_ai_models():
     return model
 
 @st.cache_data
-def load_knowledge_base():
+def load_knowledge_base(force_reload=0):
     if not cache_path.exists():
         return None
     with open(cache_path, "rb") as f:
@@ -58,11 +67,12 @@ def search_knowledge_base(query: str, top_k: int = 5):
     citations = []
     
     for idx in top_indices:
-        filename = filenames[idx]
-        score = cosine_scores[idx]
-        content = read_wiki_file(filename)
-        context += f"\n--- NOTE: {filename} ---\n{content}\n"
-        citations.append(f"{filename}")
+        if idx < len(filenames):
+            filename = filenames[idx]
+            score = cosine_scores[idx]
+            content = read_wiki_file(filename)
+            context += f"\n--- NOTE: {filename} ---\n{content}\n"
+            citations.append(f"{filename}")
         
     return context, citations
 
@@ -92,31 +102,73 @@ def generate_response(query: str, context: str):
 # --- UI Setup ---
 st.title("🧠 SecondSelf: The Oracle")
 
-# Sidebar: The Cartographer Graph
+# --- SIDEBAR: Command Center ---
 with st.sidebar:
-    st.header("The Cartographer")
-    st.write("Visual Knowledge Graph")
+    st.header("Command Center")
     
-    # Read the graph data and HTML and inject to bypass iframe static file issues
-    html_path = script_dir / "index.html"
-    js_path = script_dir / "graph_data.js"
-    
-    if html_path.exists() and js_path.exists():
-        with open(html_path, "r", encoding="utf-8") as f:
-            html_content = f.read()
-        with open(js_path, "r", encoding="utf-8") as f:
-            js_content = f.read()
+    # 1. Capture Engine
+    st.subheader("Capture Quick Note")
+    quick_note = st.text_area("Write your idea here...", height=100, label_visibility="collapsed", placeholder="Type a new thought...")
+    if st.button("Capture note"):
+        if quick_note.strip():
+            try:
+                record = capture.NoteHandler.process(quick_note)
+                capture.save_record_to_raw(record)
+                st.success("Note captured successfully!")
+            except Exception as e:
+                st.error(f"Failed to capture note: {e}")
+        else:
+            st.warning("Note is empty.")
             
-        # Inject JS directly into HTML to avoid local iframe CORS/path issues
-        injected_html = html_content.replace(
-            '<script src="graph_data.js"></script>',
-            f"<script>{js_content}</script>"
-        )
-        
-        st.components.v1.html(injected_html, height=600, scrolling=True)
-    else:
-        st.warning("Run build_graph.py first to generate the visualization.")
+    st.divider()
+    
+    # 2. Pipeline Engine
+    st.subheader("Pipeline")
+    force_reprocess = st.checkbox("force re-process")
+    if st.button("Process new captures"):
+        with st.spinner("Running AI Pipeline..."):
+            try:
+                if force_reprocess:
+                    if cache_path.exists():
+                        cache_path.unlink()
+                    js_path = script_dir / "graph_data.js"
+                    if js_path.exists():
+                        js_path.unlink()
+                
+                # Execute Pipeline
+                classify.process_raw_captures()
+                link.process_links()
+                build_graph.build_graph()
+                
+                # Force reload of cache in Streamlit
+                st.session_state.force_reload = st.session_state.get("force_reload", 0) + 1
+                load_knowledge_base.clear()
+                cache_data = load_knowledge_base(st.session_state.force_reload)
+                
+                st.write("pipeline completed")
+                st.success("Wiki, links and graphs updated")
+            except Exception as e:
+                st.error(f"Pipeline failed: {e}")
+                
+    st.divider()
+    
+    # 3. System Diagnostics
+    st.subheader("System Diagnostics")
+    total, used, free = shutil.disk_usage("/")
+    ram = psutil.virtual_memory()
+    
+    # Formatting to GB
+    total_gb = total // (2**30)
+    used_gb = used // (2**30)
+    free_gb = free // (2**30)
+    
+    st.metric("Total Storage Available", f"{total_gb} GB")
+    st.metric("System RAM Utilization", f"{ram.percent}%")
+    st.caption(f"Storage Used: {used_gb} GB / Free: {free_gb} GB")
 
+
+# --- MAIN VIEW: Chat & Graph ---
+st.markdown("### Search & Chat")
 # Chat Interface
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -150,3 +202,26 @@ if prompt := st.chat_input("Ask your knowledge base..."):
                         
     # Add assistant response to chat history
     st.session_state.messages.append({"role": "assistant", "content": answer, "citations": citations})
+
+st.divider()
+
+# Cartographer Graph (Main View)
+st.markdown("### The Cartographer")
+html_path = script_dir / "index.html"
+js_path = script_dir / "graph_data.js"
+
+if html_path.exists() and js_path.exists():
+    with open(html_path, "r", encoding="utf-8") as f:
+        html_content = f.read()
+    with open(js_path, "r", encoding="utf-8") as f:
+        js_content = f.read()
+        
+    # Inject JS directly into HTML to avoid local iframe CORS/path issues
+    injected_html = html_content.replace(
+        '<script src="graph_data.js"></script>',
+        f"<script>{js_content}</script>"
+    )
+    
+    st.components.v1.html(injected_html, height=600, scrolling=True)
+else:
+    st.info("Run the Pipeline to generate the visual knowledge graph.")

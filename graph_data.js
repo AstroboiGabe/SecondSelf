@@ -2,6 +2,14 @@
 const graphData = {
   nodes: [
   {
+    "id": "0b6defb6-e686-49b8-a8a5-440c8c0cc028.md",
+    "label": "Gabriel watched The Odyssey...",
+    "group": "Resources",
+    "title": "<b>Resources</b><br><br>Gabriel watched The Odyssey directed by Christopher Nolan on 21st October 2026",
+    "shape": "dot",
+    "size": 20
+  },
+  {
     "id": "158ac9a2-d718-45e8-a2c3-efdf506fede5.md",
     "label": "Groq uses LPUs to...",
     "group": "Resources",

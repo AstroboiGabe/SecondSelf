@@ -4,3 +4,4 @@ python-dotenv>=1.0.0
 groq>=0.9.0
 sentence-transformers>=3.0.0
 streamlit>=1.30.0
+psutil>=5.9.0
