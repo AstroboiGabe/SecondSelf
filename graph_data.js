@@ -106,14 +106,6 @@ const graphData = {
     "size": 20
   },
   {
-    "id": "d2e79580-ff8e-423f-84b3-d636e8a97c76.md",
-    "label": "A markdown file containing...",
-    "group": "Resources",
-    "title": "<b>Resources</b><br><br>A markdown file containing information about architecture",
-    "shape": "dot",
-    "size": 20
-  },
-  {
     "id": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
     "label": "Implementing a local vector...",
     "group": "Projects",
@@ -133,13 +125,6 @@ const graphData = {
   edges: [
   {
     "from": "330ce743-4a6c-4d45-aecd-60e620597a26.md",
-    "to": "d2e79580-ff8e-423f-84b3-d636e8a97c76.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "330ce743-4a6c-4d45-aecd-60e620597a26.md",
     "to": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
     "color": {
       "opacity": 0.4
@@ -154,21 +139,7 @@ const graphData = {
   },
   {
     "from": "69553ad1-7efe-4eea-8f14-903b904405dd.md",
-    "to": "d2e79580-ff8e-423f-84b3-d636e8a97c76.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "69553ad1-7efe-4eea-8f14-903b904405dd.md",
     "to": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99.md",
-    "to": "d2e79580-ff8e-423f-84b3-d636e8a97c76.md",
     "color": {
       "opacity": 0.4
     }
@@ -245,13 +216,6 @@ const graphData = {
   },
   {
     "from": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
-    "to": "d2e79580-ff8e-423f-84b3-d636e8a97c76.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
     "to": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99.md",
     "color": {
       "opacity": 0.4
@@ -293,13 +257,6 @@ const graphData = {
     }
   },
   {
-    "from": "bc496b4a-8429-45fb-b0b6-9014d482bd84.md",
-    "to": "d2e79580-ff8e-423f-84b3-d636e8a97c76.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
     "from": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
     "to": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
     "color": {
@@ -316,48 +273,6 @@ const graphData = {
   {
     "from": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
     "to": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "d2e79580-ff8e-423f-84b3-d636e8a97c76.md",
-    "to": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "d2e79580-ff8e-423f-84b3-d636e8a97c76.md",
-    "to": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "d2e79580-ff8e-423f-84b3-d636e8a97c76.md",
-    "to": "69553ad1-7efe-4eea-8f14-903b904405dd.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "d2e79580-ff8e-423f-84b3-d636e8a97c76.md",
-    "to": "330ce743-4a6c-4d45-aecd-60e620597a26.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "d2e79580-ff8e-423f-84b3-d636e8a97c76.md",
-    "to": "bc496b4a-8429-45fb-b0b6-9014d482bd84.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "d2e79580-ff8e-423f-84b3-d636e8a97c76.md",
-    "to": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
     "color": {
       "opacity": 0.4
     }
@@ -414,13 +329,6 @@ const graphData = {
   {
     "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
     "to": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
-    "to": "d2e79580-ff8e-423f-84b3-d636e8a97c76.md",
     "color": {
       "opacity": 0.4
     }
