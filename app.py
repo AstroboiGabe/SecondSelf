@@ -23,26 +23,46 @@ st.set_page_config(page_title="SecondSelf Oracle", page_icon="🧠", layout="wid
 # --- Custom Styling: Search Bar Height & Green Focus Border ---
 st.markdown("""
 <style>
-/* Clean, full-height search bar wrapper (prevents clipping) */
-div[data-testid="stTextInput"] > div[data-baseweb="input"] {
-    min-height: 52px !important;
+/* 1. Force 54px height across all container wrappers for stTextInput */
+div[data-testid="stTextInput"],
+div[data-testid="stTextInput"] > div,
+div[data-testid="stTextInput"] div[data-baseweb="input"],
+div[data-testid="stTextInput"] div[data-baseweb="base-input"] {
+    min-height: 54px !important;
+    height: 54px !important;
+}
+
+/* 2. Default state: subtle glass border, NO red border */
+div[data-testid="stTextInput"] div[data-baseweb="input"],
+div[data-testid="stTextInput"] div[data-baseweb="base-input"] {
     background-color: rgba(30, 41, 59, 0.7) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important; /* Default subtle glass border */
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 12px !important;
-    transition: border-color 0.25s ease-in-out, box-shadow 0.25s ease-in-out !important;
+    transition: all 0.25s ease-in-out !important;
 }
 
-/* Change border to Green when clicked / focused */
-div[data-testid="stTextInput"] > div[data-baseweb="input"]:focus-within {
-    border: 2px solid #10b981 !important; /* Green border on focus */
-    box-shadow: 0 0 12px rgba(16, 185, 129, 0.45) !important;
+/* 3. OVERRIDE RED FOCUS RING: Force Green border on Focus/Click/Active across all BaseWeb selectors */
+div[data-testid="stTextInput"] div[data-baseweb="input"]:focus-within,
+div[data-testid="stTextInput"] div[data-baseweb="base-input"]:focus-within,
+div[data-testid="stTextInput"] input:focus,
+div[data-testid="stTextInput"] input:focus-visible,
+div[data-testid="stTextInput"] input:active {
+    border: 2px solid #10b981 !important; /* Force Green */
+    border-color: #10b981 !important;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.5) !important;
+    outline: none !important;
 }
 
-/* Inner input element text formatting */
+/* 4. Formatting input text inside */
 div[data-testid="stTextInput"] input {
+    height: 100% !important;
     color: #f8fafc !important;
-    font-size: 1.05rem !important;
-    padding: 8px 16px !important;
+    font-size: 1.1rem !important;
+    padding: 0 16px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
 }
 </style>
 """, unsafe_allow_html=True)
