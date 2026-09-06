@@ -115,6 +115,14 @@ def save_record_to_raw(record: CaptureRecord, raw_dir: Optional[str] = None) -> 
 
         # Atomically rename temporary file to final target filepath
         temp_filepath.replace(target_filepath)
+
+        # Sync to Supabase cloud database
+        try:
+            import db
+            db.save_raw_capture(record_dict)
+        except Exception:
+            pass
+
         return str(target_filepath.resolve())
     except Exception as e:
         # Cleanup temp file if write failed

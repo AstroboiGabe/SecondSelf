@@ -99,13 +99,15 @@ def main():
     user_prompt = f"USER QUERY: {args.query}\n\nRELEVANT NOTES:\n{context_text}"
     
     try:
+        model_name = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=model_name,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            temperature=0.1 # Low temperature for factual extraction
+            temperature=0.1, # Low temperature for factual extraction
+            max_tokens=1024
         )
         answer = response.choices[0].message.content
         

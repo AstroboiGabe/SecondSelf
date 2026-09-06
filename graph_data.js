@@ -26,10 +26,18 @@ const graphData = {
     "size": 20
   },
   {
-    "id": "330ce743-4a6c-4d45-aecd-60e620597a26.md",
-    "label": "LangChain is an open-source...",
+    "id": "c84a4b17-f5cf-48e7-8d84-28a3e73713bd.md",
+    "label": "To fix React re-rendering...",
     "group": "Resources",
-    "title": "<b>Resources</b><br><br>LangChain is an open-source framework for building applications powered by large language models",
+    "title": "<b>Resources</b><br><br>To fix React re-rendering issues, use React.memo and useCallback to optimize component rendering",
+    "shape": "dot",
+    "size": 20
+  },
+  {
+    "id": "9b2e9228-5041-4276-a96d-8fc1ca2ae434.md",
+    "label": "PARA is a digital...",
+    "group": "Resources",
+    "title": "<b>Resources</b><br><br>PARA is a digital information organization system developed by Tiago Forte",
     "shape": "dot",
     "size": 20
   },
@@ -38,6 +46,30 @@ const graphData = {
     "label": "A test command-line interface...",
     "group": "Resources",
     "title": "<b>Resources</b><br><br>A test command-line interface capture",
+    "shape": "dot",
+    "size": 20
+  },
+  {
+    "id": "bc496b4a-8429-45fb-b0b6-9014d482bd84.md",
+    "label": "A file containing a...",
+    "group": "Resources",
+    "title": "<b>Resources</b><br><br>A file containing a list of dependencies required for a Python project",
+    "shape": "dot",
+    "size": 20
+  },
+  {
+    "id": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
+    "label": "Implementing a local vector...",
+    "group": "Projects",
+    "title": "<b>Projects</b><br><br>Implementing a local vector search for the SecondSelf project to enable offline functionality",
+    "shape": "dot",
+    "size": 20
+  },
+  {
+    "id": "330ce743-4a6c-4d45-aecd-60e620597a26.md",
+    "label": "LangChain is an open-source...",
+    "group": "Resources",
+    "title": "<b>Resources</b><br><br>LangChain is an open-source framework for building applications powered by large language models",
     "shape": "dot",
     "size": 20
   },
@@ -66,14 +98,6 @@ const graphData = {
     "size": 20
   },
   {
-    "id": "9b2e9228-5041-4276-a96d-8fc1ca2ae434.md",
-    "label": "PARA is a digital...",
-    "group": "Resources",
-    "title": "<b>Resources</b><br><br>PARA is a digital information organization system developed by Tiago Forte",
-    "shape": "dot",
-    "size": 20
-  },
-  {
     "id": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
     "label": "When building RAG systems,...",
     "group": "Resources",
@@ -82,34 +106,10 @@ const graphData = {
     "size": 20
   },
   {
-    "id": "bc496b4a-8429-45fb-b0b6-9014d482bd84.md",
-    "label": "A file containing a...",
-    "group": "Resources",
-    "title": "<b>Resources</b><br><br>A file containing a list of dependencies required for a Python project",
-    "shape": "dot",
-    "size": 20
-  },
-  {
     "id": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
     "label": "Vector embeddings enable computers...",
     "group": "Resources",
     "title": "<b>Resources</b><br><br>Vector embeddings enable computers to calculate semantic distance between words by translating them into mathematical arrays.",
-    "shape": "dot",
-    "size": 20
-  },
-  {
-    "id": "c84a4b17-f5cf-48e7-8d84-28a3e73713bd.md",
-    "label": "To fix React re-rendering...",
-    "group": "Resources",
-    "title": "<b>Resources</b><br><br>To fix React re-rendering issues, use React.memo and useCallback to optimize component rendering",
-    "shape": "dot",
-    "size": 20
-  },
-  {
-    "id": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
-    "label": "Implementing a local vector...",
-    "group": "Projects",
-    "title": "<b>Projects</b><br><br>Implementing a local vector search for the SecondSelf project to enable offline functionality",
     "shape": "dot",
     "size": 20
   },
@@ -124,6 +124,48 @@ const graphData = {
 ],
   edges: [
   {
+    "from": "9b2e9228-5041-4276-a96d-8fc1ca2ae434.md",
+    "to": "78aab9f1-1635-4e61-ac13-7e4a9014e10a.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "9b2e9228-5041-4276-a96d-8fc1ca2ae434.md",
+    "to": "7362f1b1-c7e4-44b0-99ec-99660197ba8f.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "69553ad1-7efe-4eea-8f14-903b904405dd.md",
+    "to": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "bc496b4a-8429-45fb-b0b6-9014d482bd84.md",
+    "to": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
+    "to": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
+    "to": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
     "from": "330ce743-4a6c-4d45-aecd-60e620597a26.md",
     "to": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
     "color": {
@@ -133,13 +175,6 @@ const graphData = {
   {
     "from": "330ce743-4a6c-4d45-aecd-60e620597a26.md",
     "to": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "69553ad1-7efe-4eea-8f14-903b904405dd.md",
-    "to": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
     "color": {
       "opacity": 0.4
     }
@@ -201,20 +236,6 @@ const graphData = {
     }
   },
   {
-    "from": "9b2e9228-5041-4276-a96d-8fc1ca2ae434.md",
-    "to": "78aab9f1-1635-4e61-ac13-7e4a9014e10a.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "9b2e9228-5041-4276-a96d-8fc1ca2ae434.md",
-    "to": "7362f1b1-c7e4-44b0-99ec-99660197ba8f.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
     "from": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
     "to": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99.md",
     "color": {
@@ -250,13 +271,6 @@ const graphData = {
     }
   },
   {
-    "from": "bc496b4a-8429-45fb-b0b6-9014d482bd84.md",
-    "to": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
     "from": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
     "to": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
     "color": {
@@ -273,20 +287,6 @@ const graphData = {
   {
     "from": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
     "to": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
-    "to": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
-    "to": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
     "color": {
       "opacity": 0.4
     }

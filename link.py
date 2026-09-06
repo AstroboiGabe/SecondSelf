@@ -36,10 +36,24 @@ def process_links():
     script_dir = Path(__file__).resolve().parent
     wiki_dir = script_dir / "wiki"
     
-    if not wiki_dir.exists():
-        print(f"[ERROR] wiki/ directory not found at {wiki_dir}")
-        return
+    wiki_dir.mkdir(parents=True, exist_ok=True)
         
+    # If wiki/ has missing files, sync from Supabase so cloud containers have all notes
+    try:
+        import db
+        cloud_notes = db.get_all_wiki_notes()
+        if cloud_notes:
+            for cn in cloud_notes:
+                note_file = wiki_dir / f"{cn['id']}.md"
+                if not note_file.exists():
+                    tags_str = "\n".join([f"  - {t}" for t in cn.get("tags", [])])
+                    tags_block = f"tags:\n{tags_str}" if tags_str else "tags: []"
+                    content = f"---\nid: {cn['id']}\ntimestamp: {cn.get('timestamp')}\ntype: {cn.get('type')}\ncategory: {cn.get('category')}\n{tags_block}\n---\n\n# Summary\n{cn.get('summary', '')}\n\n---\n\n## Raw Content\n{cn.get('raw_content', '')}\n"
+                    with open(note_file, "w", encoding="utf-8") as f:
+                        f.write(content)
+    except Exception:
+        pass
+
     md_files = list(wiki_dir.glob("*.md"))
     if len(md_files) < 2:
         print("[INFO] Not enough files in wiki/ to form relationships.")
@@ -73,14 +87,20 @@ def process_links():
     print("Computing embeddings...")
     embeddings = model.encode(documents, convert_to_tensor=True)
     
-    # 2.5 Export Embeddings Cache for ask.py
-    print("Saving embeddings to cache (embeddings.pkl)...")
+    # 2.5 Export Embeddings Cache for ask.py and Supabase
+    print("Saving embeddings to cache (embeddings.pkl & Supabase)...")
     cache_data = {
         "filenames": [file_map[i]["filename"] for i in range(len(md_files))],
         "embeddings": embeddings.cpu().numpy()
     }
     with open(script_dir / "embeddings.pkl", "wb") as f:
         pickle.dump(cache_data, f)
+
+    try:
+        import db
+        db.save_vector_cache(cache_data["filenames"], cache_data["embeddings"])
+    except Exception as e:
+        print(f"[WARN] Failed to save vector cache to Supabase: {e}")
     
     # 3. Compute cosine similarity matrix
     print("Calculating cosine similarities...")
@@ -100,7 +120,7 @@ def process_links():
                 # Found a related note!
                 related_files.append((file_map[j]["filename"], score))
                 
-        # If we found links, append them to the file
+        # If we found links, append them to the file and sync with Supabase
         if related_files:
             # Sort by similarity score descending
             related_files.sort(key=lambda x: x[1], reverse=True)
@@ -114,6 +134,17 @@ def process_links():
             
             with open(file_map[i]["path"], "w", encoding="utf-8") as f:
                 f.write(new_content)
+
+            # Sync related links to Supabase
+            try:
+                import db
+                client = db.get_client()
+                if client:
+                    note_id = file_map[i]["filename"].replace(".md", "")
+                    rel_names = [rf for rf, _ in related_files]
+                    client.table("wiki_notes").update({"links": rel_names}).eq("id", note_id).execute()
+            except Exception:
+                pass
                 
             links_added += len(related_files)
             print(f"[{file_map[i]['filename']}] -> Linked {len(related_files)} related notes.")

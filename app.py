@@ -14,6 +14,7 @@ import capture
 import classify
 import link
 import build_graph
+import db
 
 # Load env for local testing
 load_dotenv()
@@ -96,8 +97,16 @@ def load_ai_models():
 
 @st.cache_data
 def load_knowledge_base(force_reload=0):
+    # 1. Try to load from Supabase cloud vector cache first
+    try:
+        cloud_cache = db.load_vector_cache()
+        if cloud_cache and len(cloud_cache.get("filenames", [])) > 0:
+            return cloud_cache
+    except Exception:
+        pass
+
+    # 2. Local fallback
     if not cache_path.exists():
-        # Automatically generate embeddings cache if missing
         link.process_links()
     if cache_path.exists():
         with open(cache_path, "rb") as f:
@@ -110,10 +119,28 @@ model = load_ai_models()
 client = Groq()
 
 def read_wiki_file(filename: str) -> str:
+    # 1. Check local disk first
     path = wiki_dir / filename
     if path.exists():
         with open(path, "r", encoding="utf-8") as f:
             return f.read()
+
+    # 2. Cloud fallback from Supabase
+    try:
+        note_id = filename.replace(".md", "")
+        note = db.get_wiki_note(note_id)
+        if note:
+            tags_str = "\n".join([f"  - {t}" for t in note.get("tags", [])])
+            tags_block = f"tags:\n{tags_str}" if tags_str else "tags: []"
+            reconstructed = f"---\nid: {note['id']}\ntimestamp: {note.get('timestamp')}\ntype: {note.get('type')}\ncategory: {note.get('category')}\n{tags_block}\n---\n\n# Summary\n{note.get('summary', '')}\n\n---\n\n## Raw Content\n{note.get('raw_content', '')}\n"
+            # Cache to container disk
+            wiki_dir.mkdir(parents=True, exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(reconstructed)
+            return reconstructed
+    except Exception:
+        pass
+
     return ""
 
 def search_knowledge_base(query: str, top_k: int = 5):
@@ -146,20 +173,42 @@ def search_knowledge_base(query: str, top_k: int = 5):
 
 def delete_node_permanently(filename: str):
     try:
-        # 1. Delete Markdown file from wiki/
+        note_id = filename.replace(".md", "")
+
+        # 1. Delete Markdown file from wiki/ (if exists)
         target_file = wiki_dir / filename
         if target_file.exists():
             target_file.unlink()
+
+        # 2. Delete local raw JSON file (if exists)
+        raw_file = raw_dir / f"{note_id}.json"
+        if raw_file.exists():
+            raw_file.unlink()
+
+        # 3. Delete any associated asset files (if exist)
+        assets_dir = raw_dir / "assets"
+        if assets_dir.exists():
+            for asset in assets_dir.glob(f"{note_id}*"):
+                try:
+                    asset.unlink()
+                except Exception:
+                    pass
+
+        # 4. Delete from Supabase cloud database (wiki_notes, vector_cache, AND raw_captures)
+        try:
+            db.delete_wiki_note(note_id)
+        except Exception as dbe:
+            print(f"[WARN] Supabase delete failed: {dbe}")
             
-        # 2. Invalidate and rebuild embeddings cache immediately
+        # 4. Invalidate and rebuild embeddings cache immediately
         if cache_path.exists():
             cache_path.unlink()
         link.process_links()
             
-        # 3. Rebuild the graph_data.js to reflect node deletion immediately
+        # 5. Rebuild the graph_data.js to reflect node deletion immediately
         build_graph.build_graph()
         
-        # 4. Immediately purge deleted file from active citations in session state
+        # 5. Immediately purge deleted file from active citations in session state
         if "messages" in st.session_state:
             for item in st.session_state.messages:
                 if isinstance(item, dict) and "citations" in item and item["citations"]:
@@ -169,7 +218,7 @@ def delete_node_permanently(filename: str):
                         or (isinstance(c, str) and c != filename)
                     ]
         
-        # 5. Clear Streamlit cache & increment force_reload to trigger graph iframe remount
+        # 6. Clear Streamlit cache & increment force_reload to trigger graph iframe remount
         load_knowledge_base.clear()
         st.session_state.force_reload = st.session_state.get("force_reload", 0) + 1
         
@@ -214,15 +263,16 @@ def generate_response(query: str, context: str):
         "'I don't know based on the provided notes.' Do NOT use outside knowledge to fill in gaps."
     )
     user_prompt = f"USER QUERY: {query}\n\nRELEVANT NOTES:\n{context}"
-    
     try:
+        model_name = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model=model_name,
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            temperature=0.1
+            temperature=0.1,
+            max_tokens=1024
         )
         return response.choices[0].message.content
     except Exception as e:
@@ -243,6 +293,10 @@ with st.sidebar:
             try:
                 record = capture.NoteHandler.process(quick_note)
                 capture.save_record_to_raw(record)
+                try:
+                    db.save_raw_capture(record.to_dict())
+                except Exception:
+                    pass
                 st.success("Note captured successfully!")
             except Exception as e:
                 st.error(f"Failed to capture note: {e}")
@@ -281,7 +335,35 @@ with st.sidebar:
                 
     st.divider()
     
-    # 3. System Diagnostics
+    # 3. Manage Knowledge Base Notes
+    st.subheader("Manage Notes")
+    kb_data = load_knowledge_base(st.session_state.get("force_reload", 0))
+    all_note_files = []
+    if kb_data and kb_data.get("filenames"):
+        all_note_files = sorted(kb_data["filenames"])
+    elif wiki_dir.exists():
+        all_note_files = sorted([f.name for f in wiki_dir.glob("*.md")])
+        
+    if all_note_files:
+        selected_note = st.selectbox(
+            "Select note to inspect or delete",
+            options=all_note_files,
+            index=0,
+            label_visibility="collapsed"
+        )
+        if selected_note:
+            with st.expander("📄 View / Delete Note", expanded=False):
+                content_preview = read_wiki_file(selected_note)
+                if content_preview:
+                    st.markdown(content_preview[:400] + ("..." if len(content_preview) > 400 else ""))
+                if st.button(f"🗑️ Delete `{selected_note}`", key=f"sidebar_del_{selected_note}", help="Permanently delete this note from database and local storage."):
+                    delete_node_permanently(selected_note)
+    else:
+        st.caption("No notes found in knowledge base.")
+
+    st.divider()
+    
+    # 4. System Diagnostics
     st.subheader("System Diagnostics")
     total, used, free = shutil.disk_usage("/")
     ram = psutil.virtual_memory()

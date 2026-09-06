@@ -61,14 +61,16 @@ def query_llm_classification(content: str) -> dict:
     # Truncate content to avoid exceeding context window (keep it lightweight)
     safe_content = content[:8000] if content else "Empty content"
     
+    model_name = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
     response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",  # Updated to current supported model
+        model=model_name,
         messages=[
             {"role": "system", "content": get_system_prompt()},
             {"role": "user", "content": f"Classify this capture:\n\n{safe_content}"}
         ],
         temperature=0.1,
-        response_format={"type": "json_object"}
+        response_format={"type": "json_object"},
+        max_tokens=1024
     )
     
     raw_output = response.choices[0].message.content.strip()
@@ -132,6 +134,23 @@ def write_to_wiki(record: dict, classification: dict, wiki_dir: Path):
     with open(target_md, "w", encoding="utf-8") as f:
         f.write(md_content)
         
+    # Sync enriched note to Supabase
+    try:
+        import db
+        note_dict = {
+            "id": uuid_str,
+            "timestamp": record.get("timestamp"),
+            "type": record.get("type"),
+            "category": classification.get("category"),
+            "tags": all_tags,
+            "summary": classification.get("summary", ""),
+            "raw_content": record.get("content", ""),
+            "links": []
+        }
+        db.upsert_wiki_note(note_dict)
+    except Exception:
+        pass
+
     return target_md
 
 
@@ -140,47 +159,64 @@ def process_raw_captures():
     raw_dir = script_dir / "raw"
     wiki_dir = script_dir / "wiki"
     
-    if not raw_dir.exists():
-        print(f"[ERROR] raw/ directory not found at {raw_dir}")
-        return
-        
-    # Find all unprocessed JSON files
-    json_files = list(raw_dir.glob("*.json"))
-    pending_files = []
+    pending_items = []
     
-    for jf in json_files:
-        try:
-            with open(jf, "r", encoding="utf-8") as f:
-                data = json.load(f)
-            if data.get("status") == "raw":
-                pending_files.append((jf, data))
-        except Exception:
-            pass
+    # 1. Check local JSON files
+    if raw_dir.exists():
+        for jf in raw_dir.glob("*.json"):
+            if jf.name.startswith(".tmp_"):
+                continue
+            try:
+                with open(jf, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                if data.get("status") == "raw":
+                    pending_items.append((jf, data))
+            except Exception:
+                pass
+
+    # 2. Check Supabase Cloud DB pending records
+    try:
+        import db
+        db_pending = db.get_pending_raw_captures()
+        seen_ids = {rec.get("id") for _, rec in pending_items}
+        for rec in db_pending:
+            if rec.get("id") not in seen_ids:
+                pending_items.append((None, rec))
+    except Exception:
+        pass
             
-    if not pending_files:
+    if not pending_items:
         print("[INFO] No pending raw captures to process.")
         return
         
-    print(f"=== Starting Auto-Classification on {len(pending_files)} records ===")
+    print(f"=== Starting Auto-Classification on {len(pending_items)} records ===")
     
-    for filepath, record in pending_files:
+    for filepath, record in pending_items:
         print(f"Processing {record.get('id')} ({record.get('type')})...", end=" ", flush=True)
         
         try:
             # 1. Ask LLM to classify
             classification = query_llm_classification(record.get("content", ""))
             
-            # 2. Write to Wiki
+            # 2. Write to Wiki (and Supabase)
             wiki_path = write_to_wiki(record, classification, wiki_dir)
             
-            # 3. Mark raw record as processed (Atomic update)
-            record["status"] = "processed"
-            tmp_path = filepath.with_name(f".tmp_{filepath.name}")
-            with open(tmp_path, "w", encoding="utf-8") as f:
-                json.dump(record, f, indent=2, ensure_ascii=False)
-                f.flush()
-                os.fsync(f.fileno())
-            tmp_path.replace(filepath)
+            # 3. Mark raw record as processed locally if file exists
+            if filepath and filepath.exists():
+                record["status"] = "processed"
+                tmp_path = filepath.with_name(f".tmp_{filepath.name}")
+                with open(tmp_path, "w", encoding="utf-8") as f:
+                    json.dump(record, f, indent=2, ensure_ascii=False)
+                    f.flush()
+                    os.fsync(f.fileno())
+                tmp_path.replace(filepath)
+
+            # 4. Mark raw record as processed in Supabase
+            try:
+                import db
+                db.mark_raw_capture_processed(record.get("id"))
+            except Exception:
+                pass
             
             print(f"[OK] -> {classification.get('category')} | {wiki_path.name}")
             

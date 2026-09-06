@@ -68,42 +68,80 @@ def build_graph():
     script_dir = Path(__file__).resolve().parent
     wiki_dir = script_dir / "wiki"
     
-    if not wiki_dir.exists():
-        print(f"[ERROR] wiki/ directory not found at {wiki_dir}")
-        return
-
-    md_files = list(wiki_dir.glob("*.md"))
-    
     nodes = []
     edges = []
-    
     node_ids = set()
+    
+    # 1. Try to fetch notes directly from Supabase
+    cloud_notes = []
+    try:
+        import db
+        cloud_notes = db.get_all_wiki_notes()
+    except Exception:
+        pass
 
-    # Build Nodes
-    for filepath in md_files:
-        data = parse_markdown_file(filepath)
-        nodes.append({
-            "id": data["id"],
-            "label": data["label"],
-            "group": data["group"],
-            "title": data["title"],
-            "shape": "dot",
-            "size": 20
-        })
-        node_ids.add(data["id"])
-        
-    # Build Edges
-    for filepath in md_files:
-        data = parse_markdown_file(filepath)
-        source_id = data["id"]
-        for target_id in data["links"]:
-            # Ensure the target actually exists to prevent broken edges
-            if target_id in node_ids:
-                edges.append({
-                    "from": source_id,
-                    "to": target_id,
-                    "color": {"opacity": 0.4}
-                })
+    if cloud_notes:
+        print(f"[INFO] Building graph from {len(cloud_notes)} Supabase cloud notes...")
+        for note in cloud_notes:
+            node_id = f"{note['id']}.md"
+            summary = note.get("summary") or "No summary available."
+            words = summary.split()
+            label = " ".join(words[:4]) + "..." if len(words) > 4 else summary
+            category = note.get("category") or "Resources"
+            tooltip = f"<b>{category}</b><br><br>{summary}"
+
+            nodes.append({
+                "id": node_id,
+                "label": label,
+                "group": category,
+                "title": tooltip,
+                "shape": "dot",
+                "size": 20
+            })
+            node_ids.add(node_id)
+
+        for note in cloud_notes:
+            source_id = f"{note['id']}.md"
+            for target_id in note.get("links", []):
+                if target_id in node_ids:
+                    edges.append({
+                        "from": source_id,
+                        "to": target_id,
+                        "color": {"opacity": 0.4}
+                    })
+    else:
+        # Fallback to local markdown files
+        if not wiki_dir.exists():
+            print(f"[ERROR] wiki/ directory not found at {wiki_dir}")
+            return
+
+        md_files = list(wiki_dir.glob("*.md"))
+        print(f"[INFO] Building graph from {len(md_files)} local markdown files...")
+
+        # Build Nodes
+        for filepath in md_files:
+            data = parse_markdown_file(filepath)
+            nodes.append({
+                "id": data["id"],
+                "label": data["label"],
+                "group": data["group"],
+                "title": data["title"],
+                "shape": "dot",
+                "size": 20
+            })
+            node_ids.add(data["id"])
+            
+        # Build Edges
+        for filepath in md_files:
+            data = parse_markdown_file(filepath)
+            source_id = data["id"]
+            for target_id in data["links"]:
+                if target_id in node_ids:
+                    edges.append({
+                        "from": source_id,
+                        "to": target_id,
+                        "color": {"opacity": 0.4}
+                    })
 
     print(f"[INFO] Parsed {len(nodes)} nodes and {len(edges)} edges.")
 
