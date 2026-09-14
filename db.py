@@ -202,23 +202,29 @@ def save_vector_cache(filenames: List[str], embeddings_matrix: np.ndarray, ids: 
     """
     Saves computed embeddings into Supabase vector_cache table.
     Takes filenames, a numpy embedding matrix, and matching note UUIDs.
+    Only upserts rows that currently exist in wiki_notes to enforce foreign key integrity.
     """
     client = get_client()
     if not client:
         return False
     try:
+        # Fetch valid wiki_notes IDs to guarantee foreign key constraint is never violated
+        valid_notes = client.table("wiki_notes").select("id").execute().data or []
+        valid_ids = set(n["id"] for n in valid_notes)
+
         rows = []
         for i, filename in enumerate(filenames):
             note_id = ids[i] if ids and i < len(ids) else filename.replace(".md", "")
-            vector_list = embeddings_matrix[i].tolist() if hasattr(embeddings_matrix[i], "tolist") else list(embeddings_matrix[i])
-            rows.append({
-                "id": note_id,
-                "filename": filename,
-                "embedding": vector_list
-            })
+            if note_id in valid_ids:
+                vector_list = embeddings_matrix[i].tolist() if hasattr(embeddings_matrix[i], "tolist") else list(embeddings_matrix[i])
+                rows.append({
+                    "id": note_id,
+                    "filename": filename,
+                    "embedding": vector_list
+                })
 
         if rows:
-            # Batch upsert
+            # Batch upsert only valid notes
             client.table("vector_cache").upsert(rows).execute()
         return True
     except Exception as e:

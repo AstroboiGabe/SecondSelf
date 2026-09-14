@@ -38,11 +38,24 @@ def process_links():
     
     wiki_dir.mkdir(parents=True, exist_ok=True)
         
-    # If wiki/ has missing files, sync from Supabase so cloud containers have all notes
+    # Two-way sync: Reconcile local wiki/ with Supabase cloud notes
     try:
         import db
         cloud_notes = db.get_all_wiki_notes()
         if cloud_notes:
+            cloud_ids = {cn["id"] for cn in cloud_notes}
+            
+            # 1. Prune local files that were deleted from Supabase
+            for local_file in wiki_dir.glob("*.md"):
+                note_id = local_file.stem
+                if note_id not in cloud_ids:
+                    try:
+                        local_file.unlink()
+                        print(f"[SYNC] Removed orphaned local note: {local_file.name}")
+                    except Exception:
+                        pass
+
+            # 2. Materialize cloud notes that are missing on local disk
             for cn in cloud_notes:
                 note_file = wiki_dir / f"{cn['id']}.md"
                 if not note_file.exists():
@@ -51,8 +64,8 @@ def process_links():
                     content = f"---\nid: {cn['id']}\ntimestamp: {cn.get('timestamp')}\ntype: {cn.get('type')}\ncategory: {cn.get('category')}\n{tags_block}\n---\n\n# Summary\n{cn.get('summary', '')}\n\n---\n\n## Raw Content\n{cn.get('raw_content', '')}\n"
                     with open(note_file, "w", encoding="utf-8") as f:
                         f.write(content)
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"[WARN] Supabase sync in link.py failed: {e}")
 
     md_files = list(wiki_dir.glob("*.md"))
     if len(md_files) < 2:

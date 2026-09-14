@@ -288,16 +288,28 @@ with st.sidebar:
     # 1. Capture Engine
     st.subheader("Capture Quick Note")
     quick_note = st.text_area("Write your idea here...", height=100, label_visibility="collapsed", placeholder="Type a new thought...")
-    if st.button("Capture note"):
+    if st.button("Capture & Index Note"):
         if quick_note.strip():
             try:
-                record = capture.NoteHandler.process(quick_note)
-                capture.save_record_to_raw(record)
-                try:
-                    db.save_raw_capture(record.to_dict())
-                except Exception:
-                    pass
-                st.success("Note captured successfully!")
+                with st.spinner("Capturing & indexing into your brain..."):
+                    record = capture.NoteHandler.process(quick_note)
+                    capture.save_record_to_raw(record)
+                    try:
+                        db.save_raw_capture(record.to_dict())
+                    except Exception:
+                        pass
+
+                    # Automatically run pipeline to classify, link, and rebuild graph
+                    classify.process_raw_captures()
+                    link.process_links()
+                    build_graph.build_graph()
+
+                    # Invalidate Streamlit caches and reload
+                    load_knowledge_base.clear()
+                    st.session_state.force_reload = st.session_state.get("force_reload", 0) + 1
+
+                st.success("Note captured, classified, and added to graph!")
+                st.rerun()
             except Exception as e:
                 st.error(f"Failed to capture note: {e}")
         else:
@@ -337,12 +349,19 @@ with st.sidebar:
     
     # 3. Manage Knowledge Base Notes
     st.subheader("Manage Notes")
+    file_set = set()
     kb_data = load_knowledge_base(st.session_state.get("force_reload", 0))
-    all_note_files = []
     if kb_data and kb_data.get("filenames"):
-        all_note_files = sorted(kb_data["filenames"])
-    elif wiki_dir.exists():
-        all_note_files = sorted([f.name for f in wiki_dir.glob("*.md")])
+        file_set.update(kb_data["filenames"])
+    if wiki_dir.exists():
+        file_set.update([f.name for f in wiki_dir.glob("*.md")])
+    try:
+        cloud_notes = db.get_all_wiki_notes()
+        if cloud_notes:
+            file_set.update([f"{cn['id']}.md" for cn in cloud_notes])
+    except Exception:
+        pass
+    all_note_files = sorted(list(file_set))
         
     if all_note_files:
         selected_note = st.selectbox(
@@ -462,6 +481,14 @@ st.markdown("""
 
 html_path = script_dir / "index.html"
 js_path = script_dir / "graph_data.js"
+
+# Auto-generate or refresh graph on launch if missing or on initial session run
+if not js_path.exists() or "graph_initialized" not in st.session_state:
+    try:
+        build_graph.build_graph()
+        st.session_state["graph_initialized"] = True
+    except Exception:
+        pass
 
 if html_path.exists() and js_path.exists():
     with open(html_path, "r", encoding="utf-8") as f:

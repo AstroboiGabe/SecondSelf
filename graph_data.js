@@ -2,26 +2,10 @@
 const graphData = {
   nodes: [
   {
-    "id": "0b6defb6-e686-49b8-a8a5-440c8c0cc028.md",
-    "label": "Gabriel watched The Odyssey...",
-    "group": "Resources",
-    "title": "<b>Resources</b><br><br>Gabriel watched The Odyssey directed by Christopher Nolan on 21st October 2026",
-    "shape": "dot",
-    "size": 20
-  },
-  {
     "id": "158ac9a2-d718-45e8-a2c3-efdf506fede5.md",
     "label": "Groq uses LPUs to...",
     "group": "Resources",
     "title": "<b>Resources</b><br><br>Groq uses LPUs to accelerate LLMs for faster agentic workflows",
-    "shape": "dot",
-    "size": 20
-  },
-  {
-    "id": "2dc6bcdc-9565-4dbb-8f82-15123f126aa1.md",
-    "label": "The provided link leads...",
-    "group": "Resources",
-    "title": "<b>Resources</b><br><br>The provided link leads to a blog post discussing the concept of an agent in the context of artificial intelligence and machine learning.",
     "shape": "dot",
     "size": 20
   },
@@ -34,10 +18,82 @@ const graphData = {
     "size": 20
   },
   {
+    "id": "7362f1b1-c7e4-44b0-99ec-99660197ba8f.md",
+    "label": "Fortelabs is a website...",
+    "group": "Resources",
+    "title": "<b>Resources</b><br><br>Fortelabs is a website offering resources and guides on productivity, note-taking, and personal knowledge management",
+    "shape": "dot",
+    "size": 20
+  },
+  {
+    "id": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
+    "label": "SBERT is a website...",
+    "group": "Resources",
+    "title": "<b>Resources</b><br><br>SBERT is a website providing sentence embeddings and related tools for natural language processing tasks",
+    "shape": "dot",
+    "size": 20
+  },
+  {
+    "id": "78aab9f1-1635-4e61-ac13-7e4a9014e10a.md",
+    "label": "The Archives section in...",
+    "group": "Resources",
+    "title": "<b>Resources</b><br><br>The Archives section in PARA is used for storing inactive items that may be needed in the future",
+    "shape": "dot",
+    "size": 20
+  },
+  {
+    "id": "a3236475-108a-4f06-bd45-381e2e4d06ad.md",
+    "label": "Gabriel watched the movie...",
+    "group": "Archives",
+    "title": "<b>Archives</b><br><br>Gabriel watched the movie \"Spiderman: Brand New Day\" directed by Destin Daniel on August 4, 2026.",
+    "shape": "dot",
+    "size": 20
+  },
+  {
+    "id": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
+    "label": "Vector embeddings enable computers...",
+    "group": "Resources",
+    "title": "<b>Resources</b><br><br>Vector embeddings enable computers to calculate semantic distance between words by translating them into mathematical arrays.",
+    "shape": "dot",
+    "size": 20
+  },
+  {
+    "id": "55448cc9-12f7-413b-97b5-41e81af1fbd3.md",
+    "label": "Gabriel added a permanent...",
+    "group": "Resources",
+    "title": "<b>Resources</b><br><br>Gabriel added a permanent note storage database to Second Self on his 30th birthday.",
+    "shape": "dot",
+    "size": 20
+  },
+  {
     "id": "9b2e9228-5041-4276-a96d-8fc1ca2ae434.md",
     "label": "PARA is a digital...",
     "group": "Resources",
     "title": "<b>Resources</b><br><br>PARA is a digital information organization system developed by Tiago Forte",
+    "shape": "dot",
+    "size": 20
+  },
+  {
+    "id": "2dc6bcdc-9565-4dbb-8f82-15123f126aa1.md",
+    "label": "The provided link leads...",
+    "group": "Resources",
+    "title": "<b>Resources</b><br><br>The provided link leads to a blog post discussing the concept of an agent in the context of artificial intelligence and machine learning.",
+    "shape": "dot",
+    "size": 20
+  },
+  {
+    "id": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
+    "label": "When building RAG systems,...",
+    "group": "Resources",
+    "title": "<b>Resources</b><br><br>When building RAG systems, chunk text based on semantic boundaries to preserve context.",
+    "shape": "dot",
+    "size": 20
+  },
+  {
+    "id": "1916058b-8098-49b2-aba9-553e48d03200.md",
+    "label": "Gabriel watched a Kara...",
+    "group": "Archives",
+    "title": "<b>Archives</b><br><br>Gabriel watched a Kara movie with his mother on Mother\u2019s Day 2026.",
     "shape": "dot",
     "size": 20
   },
@@ -58,14 +114,6 @@ const graphData = {
     "size": 20
   },
   {
-    "id": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
-    "label": "Implementing a local vector...",
-    "group": "Projects",
-    "title": "<b>Projects</b><br><br>Implementing a local vector search for the SecondSelf project to enable offline functionality",
-    "shape": "dot",
-    "size": 20
-  },
-  {
     "id": "330ce743-4a6c-4d45-aecd-60e620597a26.md",
     "label": "LangChain is an open-source...",
     "group": "Resources",
@@ -82,47 +130,160 @@ const graphData = {
     "size": 20
   },
   {
-    "id": "7362f1b1-c7e4-44b0-99ec-99660197ba8f.md",
-    "label": "Fortelabs is a website...",
-    "group": "Resources",
-    "title": "<b>Resources</b><br><br>Fortelabs is a website offering resources and guides on productivity, note-taking, and personal knowledge management",
+    "id": "8782b53f-a268-49aa-972a-797a3d040f7c.md",
+    "label": "Gabriel watched The Odyssey...",
+    "group": "Archives",
+    "title": "<b>Archives</b><br><br>Gabriel watched The Odyssey directed by Christopher Nolan on 21 July 2026.",
     "shape": "dot",
     "size": 20
   },
   {
-    "id": "78aab9f1-1635-4e61-ac13-7e4a9014e10a.md",
-    "label": "The Archives section in...",
-    "group": "Resources",
-    "title": "<b>Resources</b><br><br>The Archives section in PARA is used for storing inactive items that may be needed in the future",
+    "id": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
+    "label": "Implementing a local vector...",
+    "group": "Projects",
+    "title": "<b>Projects</b><br><br>Implementing a local vector search for the SecondSelf project to enable offline functionality",
     "shape": "dot",
     "size": 20
   },
   {
-    "id": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
-    "label": "When building RAG systems,...",
+    "id": "149744ad-95ee-4e94-8988-e34f1c46c247.md",
+    "label": "A note documenting CM...",
     "group": "Resources",
-    "title": "<b>Resources</b><br><br>When building RAG systems, chunk text based on semantic boundaries to preserve context.",
+    "title": "<b>Resources</b><br><br>A note documenting CM Vijay's September 7, 2026 speech condemning DMK's corruption and malpractices.",
     "shape": "dot",
     "size": 20
   },
   {
-    "id": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
-    "label": "Vector embeddings enable computers...",
+    "id": "13690ba4-e08f-4eff-8d81-0536cfa998cd.md",
+    "label": "A note listing telegram\u2011infused...",
     "group": "Resources",
-    "title": "<b>Resources</b><br><br>Vector embeddings enable computers to calculate semantic distance between words by translating them into mathematical arrays.",
+    "title": "<b>Resources</b><br><br>A note listing telegram\u2011infused pirate download websites such as t4tsa.cc, phonofilm.net, and tylermoviesempire.com.",
     "shape": "dot",
     "size": 20
   },
   {
-    "id": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
-    "label": "SBERT is a website...",
+    "id": "122ca6b0-a0b7-4dd0-bcc3-161cca3502e0.md",
+    "label": "Gabriel added #cinephile and...",
     "group": "Resources",
-    "title": "<b>Resources</b><br><br>SBERT is a website providing sentence embeddings and related tools for natural language processing tasks",
+    "title": "<b>Resources</b><br><br>Gabriel added #cinephile and #filmcritic tags to his film review on the Vero platform.",
+    "shape": "dot",
+    "size": 20
+  },
+  {
+    "id": "5130bc73-fdb3-482e-97cf-ab4295b98d96.md",
+    "label": "Overview of different AI...",
+    "group": "Resources",
+    "title": "<b>Resources</b><br><br>Overview of different AI model types and their performance characteristics.",
     "shape": "dot",
     "size": 20
   }
 ],
   edges: [
+  {
+    "from": "7362f1b1-c7e4-44b0-99ec-99660197ba8f.md",
+    "to": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "7362f1b1-c7e4-44b0-99ec-99660197ba8f.md",
+    "to": "9b2e9228-5041-4276-a96d-8fc1ca2ae434.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
+    "to": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
+    "to": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
+    "to": "7362f1b1-c7e4-44b0-99ec-99660197ba8f.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
+    "to": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
+    "to": "330ce743-4a6c-4d45-aecd-60e620597a26.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
+    "to": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "78aab9f1-1635-4e61-ac13-7e4a9014e10a.md",
+    "to": "9b2e9228-5041-4276-a96d-8fc1ca2ae434.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "78aab9f1-1635-4e61-ac13-7e4a9014e10a.md",
+    "to": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "a3236475-108a-4f06-bd45-381e2e4d06ad.md",
+    "to": "8782b53f-a268-49aa-972a-797a3d040f7c.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "a3236475-108a-4f06-bd45-381e2e4d06ad.md",
+    "to": "1916058b-8098-49b2-aba9-553e48d03200.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
+    "to": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
+    "to": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
+    "to": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
   {
     "from": "9b2e9228-5041-4276-a96d-8fc1ca2ae434.md",
     "to": "78aab9f1-1635-4e61-ac13-7e4a9014e10a.md",
@@ -138,6 +299,69 @@ const graphData = {
     }
   },
   {
+    "from": "2dc6bcdc-9565-4dbb-8f82-15123f126aa1.md",
+    "to": "5130bc73-fdb3-482e-97cf-ab4295b98d96.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
+    "to": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
+    "to": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
+    "to": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
+    "to": "330ce743-4a6c-4d45-aecd-60e620597a26.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
+    "to": "69553ad1-7efe-4eea-8f14-903b904405dd.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "1916058b-8098-49b2-aba9-553e48d03200.md",
+    "to": "8782b53f-a268-49aa-972a-797a3d040f7c.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "1916058b-8098-49b2-aba9-553e48d03200.md",
+    "to": "a3236475-108a-4f06-bd45-381e2e4d06ad.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
+    "from": "1916058b-8098-49b2-aba9-553e48d03200.md",
+    "to": "122ca6b0-a0b7-4dd0-bcc3-161cca3502e0.md",
+    "color": {
+      "opacity": 0.4
+    }
+  },
+  {
     "from": "69553ad1-7efe-4eea-8f14-903b904405dd.md",
     "to": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
     "color": {
@@ -147,20 +371,6 @@ const graphData = {
   {
     "from": "bc496b4a-8429-45fb-b0b6-9014d482bd84.md",
     "to": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
-    "to": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
-    "to": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
     "color": {
       "opacity": 0.4
     }
@@ -208,127 +418,57 @@ const graphData = {
     }
   },
   {
-    "from": "7362f1b1-c7e4-44b0-99ec-99660197ba8f.md",
-    "to": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
+    "from": "8782b53f-a268-49aa-972a-797a3d040f7c.md",
+    "to": "a3236475-108a-4f06-bd45-381e2e4d06ad.md",
     "color": {
       "opacity": 0.4
     }
   },
   {
-    "from": "7362f1b1-c7e4-44b0-99ec-99660197ba8f.md",
-    "to": "9b2e9228-5041-4276-a96d-8fc1ca2ae434.md",
+    "from": "8782b53f-a268-49aa-972a-797a3d040f7c.md",
+    "to": "1916058b-8098-49b2-aba9-553e48d03200.md",
     "color": {
       "opacity": 0.4
     }
   },
   {
-    "from": "78aab9f1-1635-4e61-ac13-7e4a9014e10a.md",
-    "to": "9b2e9228-5041-4276-a96d-8fc1ca2ae434.md",
+    "from": "8782b53f-a268-49aa-972a-797a3d040f7c.md",
+    "to": "122ca6b0-a0b7-4dd0-bcc3-161cca3502e0.md",
     "color": {
       "opacity": 0.4
     }
   },
   {
-    "from": "78aab9f1-1635-4e61-ac13-7e4a9014e10a.md",
-    "to": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
-    "to": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
+    "from": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
     "to": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
     "color": {
       "opacity": 0.4
     }
   },
   {
-    "from": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
+    "from": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
     "to": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
     "color": {
       "opacity": 0.4
     }
   },
   {
-    "from": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
-    "to": "330ce743-4a6c-4d45-aecd-60e620597a26.md",
+    "from": "122ca6b0-a0b7-4dd0-bcc3-161cca3502e0.md",
+    "to": "8782b53f-a268-49aa-972a-797a3d040f7c.md",
     "color": {
       "opacity": 0.4
     }
   },
   {
-    "from": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
-    "to": "69553ad1-7efe-4eea-8f14-903b904405dd.md",
+    "from": "122ca6b0-a0b7-4dd0-bcc3-161cca3502e0.md",
+    "to": "1916058b-8098-49b2-aba9-553e48d03200.md",
     "color": {
       "opacity": 0.4
     }
   },
   {
-    "from": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
-    "to": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
-    "to": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
-    "to": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
-    "to": "bcc2522f-15a0-45ca-8923-c2903d368072.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
-    "to": "b6d283cf-c28f-46a7-b80a-77cbc8bf0406.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
-    "to": "7362f1b1-c7e4-44b0-99ec-99660197ba8f.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
-    "to": "6fa9ce9e-4077-4ada-bbba-ddccc6294f99.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
-    "to": "330ce743-4a6c-4d45-aecd-60e620597a26.md",
-    "color": {
-      "opacity": 0.4
-    }
-  },
-  {
-    "from": "f4b4632f-07ba-4a58-8d1a-e5c25d6f8002.md",
-    "to": "ea854556-be88-4021-a7b5-a9ef8927407b.md",
+    "from": "5130bc73-fdb3-482e-97cf-ab4295b98d96.md",
+    "to": "2dc6bcdc-9565-4dbb-8f82-15123f126aa1.md",
     "color": {
       "opacity": 0.4
     }
